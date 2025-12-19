@@ -27,7 +27,7 @@ body{
   overflow-x:hidden;
 }
 
-/* ===== BACKGROUND BUTTERFLIES (LIGHT) ===== */
+/* ===== BACKGROUND BUTTERFLIES (AMBIENT ONLY) ===== */
 .butterflies{
   position:fixed; inset:0;
   pointer-events:none;
@@ -35,8 +35,7 @@ body{
 }
 .butterfly{
   position:absolute;
-  width:24px;
-  height:18px;
+  font-size:20px;
   opacity:.25;
   animation: drift var(--dur) ease-in-out infinite alternate;
 }
@@ -65,7 +64,7 @@ body{
   to{transform:translate(var(--dx),var(--dy))}
 }
 
-/* ===== CONFETTI (CANVAS) ===== */
+/* ===== CONFETTI (ONLY ON OPEN) ===== */
 #confetti{
   position:fixed; inset:0;
   pointer-events:none;
@@ -202,28 +201,47 @@ It’s about the quiet way you exist—
 how you make space feel warmer
 just by being in it.
 
+You’ve taught me that feeling deeply
+isn’t weakness,
+that a heart can be both gentle and strong
+without apologizing for either.
+
+You bring clarity without forcing answers,
+light without asking to be followed.
+And somehow, being close to you
+makes the world feel more honest.
+
+So today, I celebrate you—
+your presence, your timing,
+the calm and the spark you carry so naturally.
+
 Happy birthday.
-I’m grateful for you.`;
+I’m grateful for you,
+and for every moment
+your heart chooses to stay.
+
+— yours, always 🌿`;
+
 
 date.textContent = new Date().toDateString();
 
-/* BACKGROUND BUTTERFLIES (LIGHT) */
+/* AMBIENT BUTTERFLIES */
 const bf = document.getElementById("butterflies");
-for(let i=0;i<8;i++){
+for(let i=0;i<10;i++){
   const b=document.createElement("div");
   b.className="butterfly";
+  b.textContent="🦋";
   b.style.left=Math.random()*100+"vw";
   b.style.top=Math.random()*100+"vh";
   b.style.setProperty("--dx",(Math.random()*80-40)+"px");
   b.style.setProperty("--dy",(Math.random()*80-40)+"px");
   b.style.setProperty("--dur",(6+Math.random()*6)+"s");
-  b.innerHTML="🦋";
   bf.appendChild(b);
 }
 
 /* FIREFLIES */
 const ff=document.getElementById("fireflies");
-for(let i=0;i<12;i++){
+for(let i=0;i<14;i++){
   const f=document.createElement("div");
   f.className="fly";
   f.style.left=Math.random()*100+"vw";
@@ -234,7 +252,7 @@ for(let i=0;i<12;i++){
   ff.appendChild(f);
 }
 
-/* CONFETTI */
+/* CONFETTI (ONLY ON OPEN) */
 const canvas=document.getElementById("confetti");
 const ctx=canvas.getContext("2d");
 function resize(){canvas.width=innerWidth;canvas.height=innerHeight}
@@ -242,7 +260,7 @@ resize();addEventListener("resize",resize);
 
 let pieces=[];
 function confettiBurst(){
-  for(let i=0;i<120;i++){
+  for(let i=0;i<140;i++){
     pieces.push({
       x:Math.random()*canvas.width,
       y:-10,
@@ -264,15 +282,19 @@ function draw(){
 }
 draw();
 
-/* GIFT LOGIC (SINGLE TAP) */
+/* GIFT LOGIC — SINGLE EVENT */
 let taps=0;
+const REQUIRED=3;
+
 openBtn.addEventListener("click",()=>{
+  if(taps>=REQUIRED) return;
   taps++;
-  bar.style.width=Math.min(100,(taps/3)*100)+"%";
-  if(taps===3){
+  bar.style.width=(taps/REQUIRED*100)+"%";
+
+  if(taps===REQUIRED){
     reveal.classList.add("show");
     openBtn.disabled=true;
-    confettiBurst();
+    confettiBurst(); // 🎉 ONLY HERE
   }
 });
 </script>

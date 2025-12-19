@@ -650,12 +650,12 @@ your heart chooses to stay.
     }
 
     // Falling shower (confetti-like)
-    function butterflyShower(n=90){
+    function butterflyShower(n=50){
       for (let i=0;i<n;i++){
         const tint = tints[(Math.random()*tints.length)|0];
         const leftVW = Math.random()*100;
 
-        const fallDur = (2.8 + Math.random()*2.8) + "s";
+        const fallDur = (2.8 + Math.random()*2.0) + "s";
         const swayDur = (1.2 + Math.random()*1.6) + "s";
         const sway = (8 + Math.random()*22) + "px";
         const spin = ((-1 + Math.random()*2) * 70) + "deg";
@@ -816,3 +816,4 @@ your heart chooses to stay.
   </script>
 </body>
 </html>
+

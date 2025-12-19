@@ -27,7 +27,7 @@ body{
   overflow-x:hidden;
 }
 
-/* ===== BACKGROUND BUTTERFLIES (AMBIENT ONLY) ===== */
+/* ===== AMBIENT BUTTERFLIES (NO FALLING) ===== */
 .butterflies{
   position:fixed; inset:0;
   pointer-events:none;
@@ -36,12 +36,33 @@ body{
 .butterfly{
   position:absolute;
   font-size:20px;
-  opacity:.25;
+  opacity:.22;
   animation: drift var(--dur) ease-in-out infinite alternate;
 }
 @keyframes drift{
-  from{transform:translate(0,0)}
-  to{transform:translate(var(--dx),var(--dy))}
+  from{ transform: translateX(0) translateY(0); }
+  to{ transform: translateX(var(--dx)) translateY(calc(var(--dy) * 0.2)); }
+}
+
+/* ===== OPENING BUTTERFLIES (TEMPORARY FALL) ===== */
+.butterfly-fall{
+  position:fixed;
+  top:-30px;
+  font-size:22px;
+  opacity:1;
+  animation: fallFade 1.5s ease-out forwards;
+  pointer-events:none;
+  z-index:7;
+}
+@keyframes fallFade{
+  0%{
+    transform: translateY(0) rotate(0deg);
+    opacity:1;
+  }
+  100%{
+    transform: translateY(140vh) rotate(60deg);
+    opacity:0;
+  }
 }
 
 /* ===== FIREFLIES ABOVE CONTENT ===== */
@@ -64,7 +85,7 @@ body{
   to{transform:translate(var(--dx),var(--dy))}
 }
 
-/* ===== CONFETTI (ONLY ON OPEN) ===== */
+/* ===== CONFETTI (ON OPEN ONLY) ===== */
 #confetti{
   position:fixed; inset:0;
   pointer-events:none;
@@ -222,7 +243,6 @@ your heart chooses to stay.
 
 — yours, always 🌿`;
 
-
 date.textContent = new Date().toDateString();
 
 /* AMBIENT BUTTERFLIES */
@@ -233,8 +253,8 @@ for(let i=0;i<10;i++){
   b.textContent="🦋";
   b.style.left=Math.random()*100+"vw";
   b.style.top=Math.random()*100+"vh";
-  b.style.setProperty("--dx",(Math.random()*80-40)+"px");
-  b.style.setProperty("--dy",(Math.random()*80-40)+"px");
+  b.style.setProperty("--dx",(Math.random()*120-60)+"px");
+  b.style.setProperty("--dy",(Math.random()*20-10)+"px");
   b.style.setProperty("--dur",(6+Math.random()*6)+"s");
   bf.appendChild(b);
 }
@@ -252,7 +272,7 @@ for(let i=0;i<14;i++){
   ff.appendChild(f);
 }
 
-/* CONFETTI (ONLY ON OPEN) */
+/* CONFETTI */
 const canvas=document.getElementById("confetti");
 const ctx=canvas.getContext("2d");
 function resize(){canvas.width=innerWidth;canvas.height=innerHeight}
@@ -282,7 +302,20 @@ function draw(){
 }
 draw();
 
-/* GIFT LOGIC — SINGLE EVENT */
+/* OPENING BUTTERFLIES (ONCE) */
+function butterflyFallOnce(count=18){
+  for(let i=0;i<count;i++){
+    const b=document.createElement("div");
+    b.className="butterfly-fall";
+    b.textContent="🦋";
+    b.style.left=Math.random()*100+"vw";
+    b.style.animationDelay=(Math.random()*0.2)+"s";
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(),1500);
+  }
+}
+
+/* GIFT LOGIC */
 let taps=0;
 const REQUIRED=3;
 
@@ -294,7 +327,8 @@ openBtn.addEventListener("click",()=>{
   if(taps===REQUIRED){
     reveal.classList.add("show");
     openBtn.disabled=true;
-    confettiBurst(); // 🎉 ONLY HERE
+    confettiBurst();
+    butterflyFallOnce(); // 🦋 ONLY HERE
   }
 });
 </script>
